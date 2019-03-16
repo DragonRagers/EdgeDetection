@@ -26,7 +26,7 @@ def colorDifference(pix1, pix2):
     r2,g2,b2 = pix2
     return math.sqrt((r1-r2)**2 + (g1-g2)**2 + (b1-b2)**2)/3
 
-def xGradient(img, size):
+def xGradient(img, size, sensitivity):
     #gets image dimensions and loads
     width, height = img.size
     result = Image.new("RGB", (width,height),color=0)
@@ -60,16 +60,19 @@ def xGradient(img, size):
                 color = 255
             """
 
-            color = int(round(gradient * 5))
+            #scales gradient up and removes some noise
+            color = int(round(gradient * 5 * sensitivity))
+            if color <= 100:
+                color = 0
             rpix[x,y] = (color, color, color)
 
     return result
 
-#creates black and white edge image, takes file name and number of pixels on each side to consider (size of pixel buffer)
-def edgeDetection(name, size):
+#creates black and white edge image, takes file name, number of pixels to consider, and sensitivity for detection
+def edgeDetection(name, size, sensitivity):
     img = Image.open(name).convert("RGB")
-    xg = xGradient(img, size)
-    yg = xGradient(img.rotate(90,resample=0,expand=1), size).rotate(-90,resample=0,expand=1)
+    xg = xGradient(img, size, sensitivity)
+    yg = xGradient(img.rotate(90,resample=0,expand=1), size, sensitivity).rotate(-90,resample=0,expand=1)
     return Image.blend(xg, yg, .5)
 
 def main():
@@ -77,10 +80,11 @@ def main():
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument("-i", default = "images\\input.png")
     parser.add_argument("-p", type = int, default = 1)
+    parser.add_argument("-s", type = float, default = 1)
     args = parser.parse_args()
 
     #run edge detection
-    edgeDetection(args.i,args.p).show()
+    edgeDetection(args.i,args.p,args.s).show()
     print("Done")
 
 if __name__ == "__main__":
