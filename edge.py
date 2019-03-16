@@ -52,12 +52,16 @@ def xGradient(img, size):
                     gradient -= gray(pix[x-size+i,y])
             """
 
+            """
             #decides whether the pixel should be white or black
             # TODO: Figure out a good cut off instead of abritary formula / number
-            if int(round(abs(gradient) / (math.sqrt(255**2*3)*size) * 255)) < 17:
+            if int(round(gradient / (math.sqrt(255**2*3)*size) * 255)) < 17:
                 color = 0
             else:
                 color = 255
+            """
+
+            color = int(round(gradient * 3))
             rpix[x,y] = (color, color, color)
 
     return result
