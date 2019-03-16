@@ -1,7 +1,6 @@
 from PIL import Image
 import math
-import sys, getopt
-
+import argparse
 """
 #averages RGB
 def gray(color):
@@ -61,7 +60,7 @@ def xGradient(img, size):
                 color = 255
             """
 
-            color = int(round(gradient * 3))
+            color = int(round(gradient * 5))
             rpix[x,y] = (color, color, color)
 
     return result
@@ -71,26 +70,18 @@ def edgeDetection(name, size):
     img = Image.open(name).convert("RGB")
     xg = xGradient(img, size)
     yg = xGradient(img.rotate(90,resample=0,expand=1), size).rotate(-90,resample=0,expand=1)
-    Image.blend(xg, yg, .5).show()
+    return Image.blend(xg, yg, .5)
+
+def main():
+    #command line agruments
+    parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser.add_argument("-i", default = "images\\input.png")
+    parser.add_argument("-p", type = int, default = 1)
+    args = parser.parse_args()
+
+    #run edge detection
+    edgeDetection(args.i,args.p).show()
     print("Done")
 
-#default inputs
-inputfile = "input.png"
-pixelBuffer = 1
-
-#takes command line inputs
-try:
-    opts, args = getopt.getopt(sys.argv,"i:s:")
-except getopt.GetoptError:
-    print("edge.py -i <inputfile> -s <pixel buffer size>")
-    sys.exit(2)
-for opt, arg in opts:
-    if opt == "-i":
-        inputfile = arg
-    elif opt == "-s":
-        pixelBuffer = s
-    else:
-        print("edge.py -i <inputfile> -s <pixel buffer size>")
-
-#run edge detection
-edgeDetection(inputfile, pixelBuffer)
+if __name__ == "__main__":
+    main()
