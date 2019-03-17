@@ -69,11 +69,11 @@ def xGradient(img, size, sensitivity):
     return result
 
 #creates black and white edge image, takes file name, number of pixels to consider, and sensitivity for detection
-def edgeDetection(name, size, sensitivity):
-    img = Image.open(name).convert("RGB")
+def edgeDetection(img, size = 1, sensitivity = 1):
     xg = xGradient(img, size, sensitivity)
     yg = xGradient(img.rotate(90,resample=0,expand=1), size, sensitivity).rotate(-90,resample=0,expand=1)
     return Image.blend(xg, yg, .5)
+
 
 def main():
     #command line agruments
@@ -84,7 +84,8 @@ def main():
     args = parser.parse_args()
 
     #run edge detection
-    edgeDetection(args.i,args.p,args.s).show()
+    img = Image.open(args.i).convert("RGB")
+    edgeDetection(img,args.p,args.s).show()
     print("Done")
 
 if __name__ == "__main__":
