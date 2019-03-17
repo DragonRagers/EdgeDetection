@@ -3,8 +3,9 @@ import numpy as np
 from PIL import Image
 import moviepy.editor as mpy
 from multiprocessing import Pool
+from tqdm import tqdm
 
-input = mpy.VideoFileClip("videos\\test.mp4")
+input = mpy.VideoFileClip("videos\\flower.mp4")
 
 #resize width to input maintaining aspect ratio
 def resize(img, basewidth = 500):
@@ -26,11 +27,14 @@ clip.write_gif("test.gif", fps = 1)
 
 #multiprocess edge detection processing per frame and stich them back together into a gif
 if __name__ == '__main__':
-    time = 5
+    time = 10
     fps = 24
 
+    print("Applying Edge Detection Algorithm to Frames:")
     p = Pool(8)
-    results = [p.apply_async(edgeFrame, args=(t,)) for t in np.linspace(0,time,time*fps)]
-    imgs = [p.get() for p in results]
+    imgs = list(tqdm(p.imap(edgeFrame, np.linspace(0,time,time*fps)), total=time*fps))
+
     clip = mpy.ImageSequenceClip(imgs, fps)
-    clip.write_gif("pew.gif")
+    #clip.write_videofile("test.mp4")
+    clip.write_gif("test.gif")
+    print("Done :)")
