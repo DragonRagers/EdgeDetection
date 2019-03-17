@@ -27,7 +27,7 @@ clip.write_gif("test.gif", fps = 1)
 
 #multiprocess edge detection processing per frame and stich them back together into a gif
 if __name__ == '__main__':
-    time = 10
+    time = 60
     fps = 24
 
     print("Applying Edge Detection Algorithm to Frames:")
@@ -38,3 +38,4 @@ if __name__ == '__main__':
     #clip.write_videofile("test.mp4")
     clip.write_gif("test.gif")
     print("Done :)")
+    raw_input("Press Enter to Close:")
