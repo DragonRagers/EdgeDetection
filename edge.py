@@ -43,7 +43,7 @@ def xGradient(img, size, sensitivity):
                 gradient += colorDifference(pix[x-size+i,y], pix[x+size-i,y])
 
             #scales gradient up and removes some noise
-            color = int(round(gradient * 5 * sensitivity))
+            color = int(round(gradient * 10 * sensitivity))
             if color <= 100:
                 color = 0
             rpix[x,y] = (color, color, color)
