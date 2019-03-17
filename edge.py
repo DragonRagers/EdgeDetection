@@ -42,24 +42,6 @@ def xGradient(img, size, sensitivity):
             for i in range(size):
                 gradient += colorDifference(pix[x-size+i,y], pix[x+size-i,y])
 
-            """
-            #gray scale comparison of pixels on corresponding sides
-            for  i in range(2*size+1):
-                if i < size:
-                    gradient += gray(pix[x-size+i,y])
-                elif i > size + 1:
-                    gradient -= gray(pix[x-size+i,y])
-            """
-
-            """
-            #decides whether the pixel should be white or black
-            # TODO: Figure out a good cut off instead of abritary formula / number
-            if int(round(gradient / (math.sqrt(255**2*3)*size) * 255)) < 17:
-                color = 0
-            else:
-                color = 255
-            """
-
             #scales gradient up and removes some noise
             color = int(round(gradient * 5 * sensitivity))
             if color <= 100:
